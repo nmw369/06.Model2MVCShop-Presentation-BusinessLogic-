@@ -171,10 +171,16 @@ public class ProductController {
 		
 		// Business logic 수행
 		
+		//검색시 값입력
 		search.setSearchCondition(request.getParameter("searchCondition"));
 		search.setSearchKeyword(request.getParameter("searchKeyword"));
+		/*search.setStartRowNum();
+		search.setEndRowNum();*/
+		
+		System.out.println(request.getParameter("searchCondition")+":::::::::"+request.getParameter("searchKeyword"));
 		
 		
+				
 		Map<String , Object> map=productService.getProductList(search);
 		
 		Page resultPage = new Page( search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);

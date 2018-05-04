@@ -69,13 +69,13 @@
 	  								from  product
 											<if test="searchCondition != null">
 													<if test="searchCondition == 0 and searchKeyword !='' ">
-										 				where p.PROD_NO Like = '%'||#{searchKeyword}||'%'
+										 				where PROD_NO Like '%'||#{searchKeyword}||'%'
 													</if>
 													<if test="searchCondition == 1 and searchKeyword !='' ">
-										 				where p.PROD_NAME LIKE = '%'||#{searchKeyword}||'%'
+										 				where PROD_NAME LIKE '%'||#{searchKeyword}||'%'
 													</if>
 													<if test="searchCondition == 2 and searchKeyword !='' ">
-										 				where p.PRICE Like LIKE = '%'||#{searchKeyword}||'%'
+										 				where PRICE Like LIKE '%'||#{searchKeyword}||'%'
 													</if>
 											</if>
 											<if test="daySorting != null and daySorting=='highDay'">
@@ -118,13 +118,13 @@
 	  								from  product
 											<if test="searchCondition != null">
 													<if test="searchCondition == 0 and searchKeyword !='' ">
-										 				where PROD_NO Like = '%'||#{searchKeyword}||'%'
+										 				where PROD_NO Like '%'||#{searchKeyword}||'%'
 													</if>
 													<if test="searchCondition == 1 and searchKeyword !='' ">
-										 				where PROD_NAME LIKE = '%'||#{searchKeyword}||'%'
+										 				where PROD_NAME LIKE '%'||#{searchKeyword}||'%'
 													</if>
 													<if test="searchCondition == 2 and searchKeyword !='' ">
-										 				where PRICE Like LIKE = '%'||#{searchKeyword}||'%'
+										 				where PRICE Like LIKE '%'||#{searchKeyword}||'%'
 													</if>
 											</if>
 											order by reg_date desc nulls last) countTable						

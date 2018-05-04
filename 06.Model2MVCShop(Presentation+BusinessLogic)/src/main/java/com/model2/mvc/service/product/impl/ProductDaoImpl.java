@@ -53,6 +53,8 @@ public class ProductDaoImpl implements ProductDao{
 	@Override
 	public List<Product> getProductList(Search search) throws Exception {
 		// TODO Auto-generated method stub
+		System.out.println("ListProduct ::::"+search);
+		
 		return sqlSession.selectList("ProductMapper.getProductList",search);
 	}
 

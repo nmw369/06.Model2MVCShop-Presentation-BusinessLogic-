@@ -90,6 +90,20 @@ public class Search {
 	public int getStartRowNum() {
 		return (getCurrentPage()-1)*getPageSize()+1;
 	}
+	
+	
+	
+	public void setEndRowNum(int endRowNum) {
+		this.endRowNum = getCurrentPage()*getPageSize();
+	}
+
+
+
+	public void setStartRowNum(int startRowNum) {
+		this.startRowNum = (getCurrentPage()-1)*getPageSize()+1;
+	}
+
+
 
 	@Override
 	public String toString() {
