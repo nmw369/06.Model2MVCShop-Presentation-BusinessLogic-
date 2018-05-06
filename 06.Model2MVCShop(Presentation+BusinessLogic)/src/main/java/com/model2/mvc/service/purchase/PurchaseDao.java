@@ -17,7 +17,7 @@ import com.model2.mvc.common.Search;
 import com.model2.mvc.service.domain.Purchase;
 
 public interface PurchaseDao {
-	public int insertPurchase(Purchase purchase) throws Exception;
+	public void insertPurchase(Purchase purchase) throws Exception;
 	
 	public Purchase getPurchase(int tranNo) throws Exception;
 	

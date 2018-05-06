@@ -196,7 +196,7 @@ public class ProductController {
 		
 		return "forward:/product/listProduct.jsp";
 	}
-	
+	/*
 	@RequestMapping("/mainView.do")
 	 public String mainlist(HttpServletRequest request ,HttpServletResponse response) throws Exception{
 		System.out.println("===========mainlist==========start");
@@ -218,7 +218,7 @@ public class ProductController {
 				request.setAttribute("pday", day);
 				
 				
-				map = productService.getLookupList(day);
+				map =  productService.getLookupList(day);
 				
 				
 				request.setAttribute("lookuplist", map.get("lookuplist"));
@@ -306,7 +306,7 @@ public class ProductController {
 		  	      
 		  	      String ipLog = ip+"날짜-시간:"+logday+"//접속ID:"+user.getUserId();
 		  	      
-		  	      /*bw.write(ipLog);*/
+		  	      bw.write(ipLog);
 		  	      bw.newLine();
 		  	      bw.flush();
 		  	      
@@ -315,5 +315,5 @@ public class ProductController {
 			System.out.println("===========mainlist==========end");			
 
 			return "forward:/main/mainView.jsp";
-		}
+		}*/
 }

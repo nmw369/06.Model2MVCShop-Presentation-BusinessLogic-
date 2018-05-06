@@ -9,9 +9,9 @@ import com.model2.mvc.service.domain.User;
 public class Purchase {
 	
 	private User buyer;
-	private String dlvyAddr;
-	private String dlvyDate;
-	private String dlvyRequest;
+	private String divyAddr;
+	private String divyDate;
+	private String divyRequest;
 	private Date orderDate;
 	private String paymentOption;
 	private Product purchaseProd;
@@ -20,12 +20,25 @@ public class Purchase {
 	private String tranCode;
 	private int tranNo;
 	private int sEA;
+	private int cancelCode;
 	
 	public Purchase(){
 	}
 	
 	
 	
+	public int getCancelCode() {
+		return cancelCode;
+	}
+
+
+
+	public void setCancelCode(int cancelCode) {
+		this.cancelCode = cancelCode;
+	}
+
+
+
 	public int getsEA() {
 		return sEA;
 	}
@@ -44,23 +57,23 @@ public class Purchase {
 	public void setBuyer(User buyer) {
 		this.buyer = buyer;
 	}
-	public String getdlvyAddr() {
-		return dlvyAddr;
+	public String getDivyAddr() {
+		return divyAddr;
 	}
-	public void setdlvyAddr(String dlvyAddr) {
-		this.dlvyAddr = dlvyAddr;
+	public void setDivyAddr(String divyAddr) {
+		this.divyAddr = divyAddr;
 	}
-	public String getdlvyDate() {
-		return dlvyDate;
+	public String getDivyDate() {
+		return divyDate;
 	}
-	public void setdlvyDate(String dlvyDate) {
-		this.dlvyDate = dlvyDate;
+	public void setDivyDate(String divyDate) {
+		this.divyDate = divyDate;
 	}
-	public String getdlvyRequest() {
-		return dlvyRequest;
+	public String getDivyRequest() {
+		return divyRequest;
 	}
-	public void setdlvyRequest(String dlvyRequest) {
-		this.dlvyRequest = dlvyRequest;
+	public void setDivyRequest(String divyRequest) {
+		this.divyRequest = divyRequest;
 	}
 	public Date getOrderDate() {
 		return orderDate;
@@ -107,11 +120,11 @@ public class Purchase {
 	
 	@Override
 	public String toString() {
-		return "Purchase [buyer=" + buyer + ", dlvyAddr=" + dlvyAddr
-				+ "\n, dlvyDate=" + dlvyDate + ", dlvyRequest=" + dlvyRequest
+		return "Purchase [buyer=" + buyer + ", divyAddr=" + divyAddr
+				+ "\n, divyDate=" + divyDate + ", divyRequest=" + divyRequest
 				+ "\n, orderDate=" + orderDate + ", paymentOption=" + paymentOption 
 				+ "\n, purchaseProd=" + purchaseProd + ", receiverName=" + receiverName 
 				+ "\n, receiverPhone=" + receiverPhone + ", tranCode=" + tranCode 
-				+ "\n, tranNo=" + tranNo +"::"+sEA+"]";
+				+ "\n, tranNo=" + tranNo +"::"+sEA+"::"+cancelCode+"]";
 	}
 }

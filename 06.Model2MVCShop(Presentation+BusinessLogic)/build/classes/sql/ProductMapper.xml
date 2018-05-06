@@ -118,7 +118,7 @@
 	  								from  product
 											<if test="searchCondition != null">
 													<if test="searchCondition == 0 and searchKeyword !='' ">
-										 				where PROD_NO Like '%'||#{searchKeyword}||'%'
+										 				where PROD_NO = Like '%'||#{searchKeyword}||'%'
 													</if>
 													<if test="searchCondition == 1 and searchKeyword !='' ">
 										 				where PROD_NAME LIKE '%'||#{searchKeyword}||'%'

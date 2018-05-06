@@ -10,23 +10,23 @@
 		<result property="paymentOption"		column="payment_option"		jdbcType="CHAR" />
 		<result property="receiverName"			column="receiver_name"		jdbcType="VARCHAR" />
 		<result property="receiverPhone"		column="receiver_phone"		jdbcType="VARCHAR" />
-		<result property="dlvyAddr"				column="dlvy_addr"			jdbcType="VARCHAR" />
-		<result property="dlvyDate"				column="dlvy_date"			jdbcType="DATE" />
-		<result property="dlvyRequest"			column="dlvy_request"		jdbcType="VARCHAR" />
+		<result property="divyAddr"				column="demailaddr"			jdbcType="VARCHAR" />
+		<result property="divyDate"				column="dlvy_date"			jdbcType="DATE" />
+		<result property="divyRequest"			column="dlvy_request"		jdbcType="VARCHAR" />
 		<result property="tranCode"				column="tran_status_code"	jdbcType="CHAR" />
-		<result property="orderDate"			column="order_date"			jdbcType="DATE" />
+		<result property="orderDate"			column="order_data"			jdbcType="DATE" />
 		<result property="sEA" 				    column="sea"    			jdbcType="INTEGER"/>
 		<result property="cancelCode"			column="cancel_Code"  		jdbcType="INTEGER"/>
 		
 		<!-- <result property="buyer.userId" column="BUYER_ID" jdbcType="VARCHAR"/>
 		<result property="purchaseProd.prodNo" column="prod_no" jdbcType="VARCHAR"/> -->
 		
-		<association property="purchaseProd" javaType="product"/>
-		<association property="buyer" javaType="user"/>
+		<!-- <association property="purchaseProd" javaType="product"/>
+		<association property="buyer" javaType="user"/> -->
 		
 		
-		<!-- <association property="purchaseProd" resultMap="productSelectMap"/>
-		<association property="buyer" resultMap="userSelectMap"/> -->
+		<association property="purchaseProd" resultMap="productSelectMap"/>
+		<association property="buyer" resultMap="userSelectMap"/>
 		
 		<!-- association에 result맵을 다른 경로의 resultmap넣기 -->
 	</resultMap>
@@ -62,18 +62,20 @@
 		#{paymentOption:CHAR},
 		#{receiverName:VARCHAR},
 		#{receiverPhone:VARCHAR},
-		#{dlvyAddr:VARCHAR},
-		#{dlvyRequest:VARCHAR},
-		#{tranCode:CHAR},
-		sysdate,
-		sysdate,
+		#{divyAddr:VARCHAR},
+		#{divyRequest:VARCHAR},
+		#{tranCode},
+		SYSDATE,
+		#{divyDate},
 		#{sEA},
-		'0')		
+		#{cancelCode})		
 	</insert>
+	
+	
 	
   <update id="updatePurchase" parameterType="purchase">
 		UPDATE transaction SET payment_option=#{paymentOption:CHAR}, receiver_name=#{receiverName:VARCHAR}, receiver_phone=#{receiverPhone:VARCHAR}
-								, dlvy_addr=#{dlvyAddr:VARCHAR}, dlvy_request=#{dlvyRequest:VARCHAR}, dlvy_date=#{dlvyDate:DATE}
+								, demailaddr=#{divyAddr:VARCHAR}, dlvy_request=#{divyRequest:VARCHAR}, dlvy_date=#{divyDate:DATE}
 		WHERE tran_no = #{tranNo}
 	</update>
 	
@@ -85,21 +87,35 @@
 	</update>
 	
 	<select id="getPurchase" resultMap="purchaseSelectMap">
-		SELECT tran_no, prod_no, buyer_id, payment_option, receiver_name, receiver_phone, dlvy_addr
-				, dlvy_request, tran_status_code, order_date, TO_CHAR(dlvy_date,'yyyyMMdd') dlvy_date,sea , cancel_code
-		FROM transaction WHERE tran_no= #{tranNo}
+		SELECT t.tran_no, p.prod_no, u.user_Id, t.payment_option, u.user_name, t.receiver_phone, t.demailaddr
+				, t.dlvy_request, t.tran_status_code, t.order_data, TO_CHAR(t.dlvy_date,'yyyyMMdd') dlvy_date,t.sea , t.cancel_code
+		FROM transaction t , product p ,users u
+		WHERE tran_no= #{tranNo} and t.prod_no=p.prod_no(+) and t.buyer_id=u.user_Id and t.receiver_name = u.user_name
 		ORDER BY tran_no DESC
 	</select>
 
+	<!-- <select  id="getPurchaseList" parameterType="map" resultMap="purchaseSelectMap">
+		
+		
+			select t.buyer_id ,t.receiver_name,t.receiver_phone,t.tran_status_code,t.tran_no,
+						  p.prod_Name,p.prod_no,p.price,p.IMAGE_FILE,t.sea, t.cancel_code
+				from transaction t,product p 
+				where BUyer_id= #{buyerId} and t.prod_no = p.prod_no(+)
+				ORDER BY tran_no DESC
+		
+	</select> -->
+	
 	<select  id="getPurchaseList" parameterType="map" resultMap="purchaseSelectMap">
 		SELECT *
 		FROM ( SELECT inner_table.* , ROWNUM AS row_seq
-			FROM ( select buyer_id ,receiver_name,receiver_phone,tran_status_code,tran_no,prod_no,sea, 
-				cancel_code
-				from transaction where BUyer_id= #{buyerId}
+			FROM ( select t.buyer_id ,t.receiver_name,t.receiver_phone,t.tran_status_code,t.tran_no,
+						  p.prod_Name,p.prod_no,p.price,p.IMAGE_FILE,t.sea, t.cancel_code
+				from transaction t,product p 
+				where BUyer_id= #{buyerId} and t.prod_no = p.prod_no(+)
 				ORDER BY tran_no DESC) inner_table
 			WHERE ROWNUM &lt;= #{search.endRowNum} )
 		WHERE row_seq BETWEEN #{search.startRowNum} AND #{search.endRowNum}
+				
 	</select>
 	
 	<select  id="getTotalCount" parameterType="map"  resultType="int">

@@ -67,7 +67,7 @@
 	
 		<div style="width: 98%; margin-left: 10px;">
 		
-		<form name="detailForm" action="/listSale.do" method="post">
+		<form name="detailForm" action="/listPurchase.do" method="post">
 		
 		<table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 			<tr>
@@ -105,21 +105,20 @@
 			</tr>
 							
 							<c:set var="i" value="${currentPage}"></c:set>
-							<c:set var="j" value="${pageSize}"></c:set>
-							<c:set var="k" value="2"></c:set>
+							
 							
 							
 							
 							<c:forEach var="vo" items="${list}">
-								<c:set var="i" value="${i*j-k}"></c:set>
+							
+								<c:set var="i" value="${i+1}"></c:set>
 							<tr class="ct_list_pop" bgcolor="#ffffff">
 								
 								<td class="ct_list_test1" align="center">
 									<a href="/getPurchase.do?tranNo=${vo.tranNo}">
 										${i}
 									</a>
-									<c:set var="k" value="${k-1}"></c:set>
-									<c:set var="i" value="${currentPage}"></c:set>
+									
 								</td>
 								<td></td>
 								<td align="center">
@@ -188,7 +187,7 @@
 			<tr>
 				<td align="center">
 			
-					<input type="hidden" id="currentPage" name="currentPage" value="${resultPage.currentPage}"/>
+					<input type="hidden" id="currentPage" name="currentPage" value=""/>
 				 
 				 <jsp:include page="../common/pageNavigator.jsp"/>
 				 
