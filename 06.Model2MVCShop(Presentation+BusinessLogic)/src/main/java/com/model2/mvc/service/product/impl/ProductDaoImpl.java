@@ -80,12 +80,13 @@ public class ProductDaoImpl implements ProductDao{
 	@Override
 	public void insertLookup(Product product) throws Exception {
 		// TODO Auto-generated method stub
-		
+		System.out.println("insert!!!!!!!!!!!!!!");
 			sqlSession.selectOne("ProductMapper.insertLookup", product);
 	}
 	@Override
 	public void daycheck(Product product) throws Exception {
 		// TODO Auto-generated method stub
+		System.out.println("dayCheck end!!!!!!!!!!!!!!!!!");
 			sqlSession.selectOne("ProductMapper.dayCheck",product);
 			
 			

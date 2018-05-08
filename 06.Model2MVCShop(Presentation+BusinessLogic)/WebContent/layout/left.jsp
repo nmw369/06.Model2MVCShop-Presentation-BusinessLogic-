@@ -57,13 +57,19 @@ function history(){
 						<a href="../product/addProductView.jsp;" target="rightFrame">판매상품등록</a>
 					</td>
 				</tr>
+				
+				<tr>
+					<td class="DepthEnd">&nbsp;</td>
+				</tr>
 				<tr>
 					<td class="Depth03">
-						<a href="/listProduct.do?menu=manage"  target="rightFrame">판매상품관리</a>
+						<a href="/listSale.do?"  target="rightFrame">판매된상품관리</a>
 					</td>
 				</tr>
 				<tr>
-					<td class="DepthEnd">&nbsp;</td>
+					<td class="Depth03">
+						<a href="/cancelList.do" target="rightFrame">구매취소목록</a>
+					</td>
 				</tr>
 			</table>
 		</td>
@@ -93,6 +99,21 @@ function history(){
 			</tr>
 			<tr>
 				<td class="Depth03"><a href="javascript:history()">최근 본 상품</a></td>
+			</tr>
+			<tr>
+				<td class="Depth03">
+					<a href="/mainView.do" target="rightFrame">Home</a>
+				</td>
+			</tr>
+			<tr>
+				<td class="Depth03">
+					<a href="javascript:chating()">실시간상담</a>
+				</td>
+			</tr>
+			<tr>
+				<td class="Depth03">
+					<a href="https://docs.oracle.com/javaee/7/api/javax/websocket/package-summary.html">채팅API</a>
+				</td>
 			</tr>
 		</table>
 	</td>

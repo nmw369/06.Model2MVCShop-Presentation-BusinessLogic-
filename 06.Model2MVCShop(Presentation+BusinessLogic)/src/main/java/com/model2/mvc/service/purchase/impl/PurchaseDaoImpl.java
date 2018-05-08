@@ -54,6 +54,26 @@ public class PurchaseDaoImpl implements PurchaseDao {
 	public int getTotalCount(Search search, String buyerId) throws Exception {
 		return sqlSession.selectOne("PurchaseMapper.getTotalCount", buyerId);
 	}
-
-
+	@Override
+	public void updateCancelCode(Purchase purchase) throws Exception {
+		// TODO Auto-generated method stub
+		sqlSession.update("PurchaseMapper.updateCancelCode",purchase);
+	}
+	@Override
+	public List<Purchase> cancelList(Search search) throws Exception {
+		// TODO Auto-generated method stub
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("search", search);
+		return sqlSession.selectList("PurchaseMapper.cancelList",map);
+	}
+	
+	@Override
+	public List<Purchase> saleList(Search search) throws Exception {
+		// TODO Auto-generated method stub
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("search", search);
+		return sqlSession.selectList("PurchaseMapper.saleList",map);
+	}
+	
+	
 }

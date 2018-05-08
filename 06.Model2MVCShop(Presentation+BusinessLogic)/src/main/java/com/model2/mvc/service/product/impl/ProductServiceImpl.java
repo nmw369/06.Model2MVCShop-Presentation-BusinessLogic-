@@ -97,6 +97,7 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 	
+	
 	@Override
 	public Map<String, Object> getLookupList(String today) throws Exception {
 		// TODO Auto-generated method stub
@@ -117,7 +118,8 @@ public class ProductServiceImpl implements ProductService{
 	public void updateEA(int sEA, Product prod) throws Exception {
 		// TODO Auto-generated method stub
 		String prodName = prod.getProdName();
-				
+		sEA = prod.getnEA()-sEA;
+		
 		productDao.updateEA(sEA, prodName);
 		
 	}

@@ -28,4 +28,10 @@ public interface PurchaseDao {
 	public List<Purchase> getPurchaseList(Search search, String buyerId) throws Exception;
 	
 	public int getTotalCount(Search search, String buyerId) throws Exception;
+	
+	public void updateCancelCode(Purchase purchase) throws Exception;
+	
+	public List<Purchase> cancelList(Search search) throws Exception;
+	
+	public List<Purchase> saleList(Search search) throws Exception;
 }

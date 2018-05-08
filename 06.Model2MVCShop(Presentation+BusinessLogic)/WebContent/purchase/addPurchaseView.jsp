@@ -58,7 +58,7 @@
 		<input type="hidden" name="purchaseProd.prodNo" value="${prodVO.prodNo}" />
 		<input type="hidden" name="buyer.userId" value="${user.userId}" />
 		<input type="hidden" name="tranCode" value="2"/>
-		<input type="hidden" name="cancelCode" value="1"/>
+		<!-- <input type="hidden" name="cancelCode" value="0"/> -->
 		 
 		
 		<table width="600" border="0" cellspacing="0" cellpadding="0"	align="center" style="margin-top: 13px;">

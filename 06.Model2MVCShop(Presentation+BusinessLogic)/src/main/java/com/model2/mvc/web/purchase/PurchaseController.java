@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +34,7 @@ import com.model2.mvc.service.product.impl.ProductServiceImpl;
 import com.model2.mvc.service.purchase.PurchaseService;
 import com.model2.mvc.service.purchase.impl.PurchaseServiceImpl;
 import com.model2.mvc.service.user.UserService;
+
 
 
 
@@ -85,6 +87,9 @@ public class PurchaseController {
 		
 		String viewName = "/purchase/addPurchaseView.jsp";
 		
+		
+		
+		
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName(viewName);
 		modelAndView.addObject("prodVO",prod);
@@ -97,6 +102,10 @@ public class PurchaseController {
 
 		System.out.println("/addPurchase.do");
 		//Business Logic
+		
+		//수량 조절 로직
+		Product product = productService.getProduct(purchase.getPurchaseProd().getProdNo());
+		productService.updateEA(purchase.getsEA(), product);
 		
 		System.out.println("여기까지 실행 완료0");
 		purchaseService.addPurchase(purchase);
@@ -154,7 +163,11 @@ public class PurchaseController {
 	@RequestMapping("/getPurchase.do")
 	public ModelAndView getPurchase( @RequestParam("tranNo")int tranNo) throws Exception {
 		
+		System.out.println(tranNo+"getPurchase들어온값!!!!!");
+		
 		Purchase purchase = purchaseService.getPurchase(tranNo);
+		
+		System.out.println(purchase+"이건 들어왔어!");
 		
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("/purchase/getPurchase.jsp");
@@ -192,18 +205,296 @@ public class PurchaseController {
 		
 	
 	
-	
-	
-	
+	/*@RequestMapping("/updateTranCode.do")	
+	public ModelAndView UpdateTranCode(@RequestParam("tranCode") int tranCode,HttpServletRequest request) throws Exception{
 		
-		public void testUpdateTranCode() throws Exception{
-			Purchase purchase = new Purchase();
-			purchase.setTranNo(10036);
-			
-			purchase.setTranCode("2");
-			Assert.assertEquals(1, purchaseService.updateTranCode(purchase));
+		ModelAndView modelAndView = new ModelAndView();
+				
+		String role = "";
+		HttpSession session = request.getSession(false);
+		User user = (User) session.getAttribute("user");
+
+		if (user != null) {
+			role = user.getRole();
 		}
 		
+		System.out.println(":::UPcode------"+user);
+		
+		String uri="";
+		
+		int tranNo = Integer.parseInt(request.getParameter("tranNo"));
+		
+		Purchase purchase = new PurchaseServiceImpl().getPurchase(tranNo);
+		if (role.equals("admin")) {
+			//admin으로 접속했을때 상품정보를 얻기위해 사용
+			uri += "/listSale.do";
+			
+		} else if (role.equals("user")) {
+			uri += "/listPurchase.do";
+		}
+		System.out.println("들어온코드::" + tranCode);
+		tranCode++;
+		System.out.println("변경된코드::" + tranCode);
+
+		String tran = tranCode+"";
+		System.out.println(tran+"=====tran값!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		purchase.setTranCode(tran);
+		purchaseService.updateTranCode(purchase);
+		
+		modelAndView.setViewName(uri);
+		
+		
+		return modelAndView;
+	}*/
 	
+	
+	@RequestMapping("/updateTranCodeByProd.do")	
+	public ModelAndView UpdateTranCodeByProd(@RequestParam("tranCode") int tranCode,@RequestParam("tranNo") int tranNo,HttpServletRequest request) throws Exception{
+		
+		
+		System.out.println("updateTranCode=====================");
+		
+		ModelAndView modelAndView = new ModelAndView();
+				
+		String role = "";
+		HttpSession session = request.getSession(false);
+		User user = (User) session.getAttribute("user");
+
+		if (user != null) {
+			role = user.getRole();
+		}
+		
+		System.out.println(":::UPcode------"+user);
+		String uri="";
+		System.out.println(tranCode+"::::::::::::::::::::::::::::");
+		System.out.println("=====================1");
+		
+		Purchase purchase = purchaseService.getPurchase(tranNo);
+		
+		System.out.println("=====================3");
+		if (role.equals("admin")) {
+			//admin으로 접속했을때 상품정보를 얻기위해 사용
+			uri += "/listSale.do";
+			
+		} else if (role.equals("user")) {
+			uri += "/listPurchase.do";
+		}
+		System.out.println("들어온코드::" + tranCode);
+		tranCode++;
+		System.out.println("변경된코드::" + tranCode);
+
+		String tran = tranCode+"";
+		
+		purchase.setTranCode(tran);
+		
+	
+		purchaseService.updateTranCode(purchase);
+		System.out.println("실행됨???");
+		modelAndView.setViewName(uri);
+		
+		
+		return modelAndView;
+	}
+	
+	
+	
+	@RequestMapping("/cancel.do")
+	public String updateCancelCode(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		// TODO Auto-generated method stub
+		
+		int cancelCode = Integer.parseInt(request.getParameter("cancelCode"));
+		int tranNo = Integer.parseInt(request.getParameter("tranNo"));
+		
+		Purchase purchase = purchaseService.getPurchase(tranNo);
+		
+		System.out.println("cancelCode value::"+cancelCode);
+		cancelCode++;
+		System.out.println("cancelCode value::"+cancelCode);
+		
+		purchase.setCancelCode(cancelCode);
+		
+		purchaseService.updateCancelCode(purchase);
+		
+		HttpSession session = request.getSession(false);
+		
+		User user = (User)session.getAttribute("user");
+		String uri="";
+		if(user.getRole()!=null&&user.getRole().equals("admin")) {
+			uri="cancelList.do";
+		}else {
+			uri="listPurchase.do";
+		}
+		
+		
+		return "forward:/"+uri;
+	}
+	
+	@RequestMapping("/cancelList.do")
+	public String cancelList(@ModelAttribute("search") Search search,HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
+		System.out.println("/CancellistPurchase.do");
+		
+		/*if(search.getCurrentPage() ==0 ){
+			search.setCurrentPage(1);
+		}
+		search.setPageSize(pageSize);*/
+		
+		
+		
+		Map<String, Object> map = purchaseService.cancelList(search);
+		
+		System.out.println(map.get("list")+"::cancel 확인");
+		/*System.out.println(map.get("totalCount")+"::page total 확인");*/
+		
+				
+		request.setAttribute("list", map.get("list"));
+		/*request.setAttribute("totalCount", map.get("totalCount"));	*/	
+		
+		return "forward:/purchase/cancelList.jsp";
+	}
+	
+	@RequestMapping("/listSale.do")
+	public String salelList(@ModelAttribute("search") Search search,HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
+		System.out.println("/saleListPurchase.do");
+		
+		/*if(search.getCurrentPage() ==0 ){
+			search.setCurrentPage(1);
+		}
+		search.setPageSize(pageSize);*/
+		
+		
+		
+		Map<String, Object> map = purchaseService.saleList(search);
+		
+		System.out.println("============================================");
+		System.out.println(map.get("list")+"::cancel 확인");
+		System.out.println("============================================");
+		
+				
+		request.setAttribute("list", map.get("list"));
+		/*request.setAttribute("totalCount", map.get("totalCount"));	*/	
+		
+		return "forward:/purchase/listSale.jsp";
+	}
+	
+	@RequestMapping("/mainView.do")
+	public String MainAction(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	
+		Map<String,Object> map = productService.getMainList();
+		request.setAttribute("list", map.get("list"));
+		//날짜별 조회수 리스트를 위한 로직
+		
+		System.out.println(map.get("list")+"sdflkjsdfljk");
+		
+		//날짜 체크해서 현재 날짜와 다르면 그전에 저장된 조회수를 lookup table 에 옮긴후 다시 1부터 시작
+		
+		Date today = new Date();
+	    System.out.println(today);
+	        
+	    SimpleDateFormat date = new SimpleDateFormat("yyyyMMdd");
+	    SimpleDateFormat time = new SimpleDateFormat("hh:mm:ss a");
+	        
+	    
+	    String currentday = date.format(today);
+
+
+	    
+	    List<Object> list = (List<Object>)map.get("list");
+	    
+	    System.out.println(map.get("list")+"::::::::::::::::::::::::::::");
+	 	for (int i = 0; i < list.size(); i++) {
+			System.out.println("aaaaaaaaaaaaaaaaa");
+	 		Product product = (Product)list.get(i);
+			if(product.getToday()!=null && product.getToday()!=currentday) {
+				productService.daycheck(currentday, product);
+			}
+			 		
+		}
+		/////////////////////////////////
+		if(request.getParameter("manuDate")!=null) {
+		//조회수리스트 제목용 날짜
+		request.setAttribute("day", request.getParameter("manuDate"));
+		
+		String day = request.getParameter("manuDate").replaceAll("-", "");
+		//달력값 날짜
+		
+			
+		request.setAttribute("pday", day);
+		
+		
+		map = productService.getLookupList(day);
+		
+		
+		request.setAttribute("lookuplist", map.get("lookuplist"));
+		
+		System.out.println(day+"=====::parsing한 날짜");
+		
+		}else {
+			today = new Date();
+			date = new SimpleDateFormat("yyyyMMdd");
+			
+			String day = date.format(today);
+			//달력값 날짜
+			
+				
+			request.setAttribute("pday", day);
+			
+			
+			map = productService.getLookupList(day);
+			
+			
+			request.setAttribute("lookuplist", map.get("lookuplist"));
+		}
+		
+	    HttpSession session = request.getSession(false);
+	    User user = (User)session.getAttribute("user");
+	    if(user== null) {
+	    	user = new User();
+	    	user.setRole("user");
+	    }
+	    
+	    System.out.println(user.getRole()+"::::adminCheck");
+	    //차트랑 조회수 구분
+	    String start = request.getParameter("start");
+	    
+	    System.out.println(start+":::start체크");
+	    
+	    if(start!=null && start.equals("yes")) {
+	    request.setAttribute("start", start);
+	    }else {
+	    request.setAttribute("start", start);
+	    }
+	    
+	    System.out.println(request.getAttribute("start")+":::start체크2");
+	    
+	    
+	    ///차트랑 리스트 날짜 별 조회
+	    System.out.println(request.getParameter("manuDate")+"::::날짜 체크!!!");
+	    request.setAttribute("manuDate", request.getParameter(date.format(today)));
+	    	    
+	    //접속한 client ip systemlog io로 txt에 입력하기
+	      System.out.println(request.getRemoteAddr()+"::접속한 클라이언트 IP 정보");
+  	      String ip = request.getRemoteAddr();
+  		
+  	      BufferedWriter bw = new BufferedWriter(new FileWriter("C:\\Users\\Bit\\git\\06.Model2MVCShop\\06.Model2MVCShop(Presentation+BusinessLogic)\\IPlog\\IpLog.txt",true));
+  	      //true 쓰면 기존 파일내용에 뒤에 추가되는 내용이 append된다. default가 false이므로 써준것
+  	      
+  	      String logday = date.format(today)+"-"+time.format(today);
+  	      
+  	      String ipLog = ip+"날짜-시간:"+logday+"//접속ID:"+user.getUserId();
+  	      
+  	      bw.write(ipLog);
+  	      bw.newLine();
+  	      bw.flush();
+  	      
+  	      bw.close();
+		
+		System.out.println("main End====================================");
+		return "forward:/main/mainView.jsp";
+	}
+		
 	
 }

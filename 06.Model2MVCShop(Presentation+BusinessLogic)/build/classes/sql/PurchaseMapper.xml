@@ -68,7 +68,7 @@
 		SYSDATE,
 		#{divyDate},
 		#{sEA},
-		#{cancelCode})		
+		nvl(#{cancelCode},0))		
 	</insert>
 	
 	
@@ -90,7 +90,7 @@
 		SELECT t.tran_no, p.prod_no, u.user_Id, t.payment_option, u.user_name, t.receiver_phone, t.demailaddr
 				, t.dlvy_request, t.tran_status_code, t.order_data, TO_CHAR(t.dlvy_date,'yyyyMMdd') dlvy_date,t.sea , t.cancel_code
 		FROM transaction t , product p ,users u
-		WHERE tran_no= #{tranNo} and t.prod_no=p.prod_no(+) and t.buyer_id=u.user_Id and t.receiver_name = u.user_name
+		WHERE tran_no= #{tranNo} and t.prod_no=p.prod_no(+) and t.buyer_id=u.user_Id
 		ORDER BY tran_no DESC
 	</select>
 
@@ -123,4 +123,48 @@
 		FROM( select buyer_id ,receiver_name,receiver_phone,tran_status_code,tran_no,prod_no,sea 
 				from transaction where BUyer_id= #{buyerId}) countTable
 	</select>
+	
+	<update id="updateCancelCode" parameterType="purchase">
+		update transaction set cancel_code=#{cancelCode} where tran_no=#{tranNo}
+		
+	</update>
+	
+	<select id="cancelList" parameterType="map" resultMap="purchaseSelectMap">
+		select
+		u.user_Id,
+		p.prod_name,
+		p.price,
+		t.sea,
+		t.cancel_Code,
+		t.tran_No
+		from 
+		users u,
+		product p,
+		transaction t
+		where t.prod_no=p.prod_No(+) and t.buyer_id = u.user_id(+) and t.cancel_code > 0
+		order by t.cancel_code
+	
+	</select>
+	
+	<select id="saleList" parameterType="map" resultMap="purchaseSelectMap" >
+		select
+		u.user_Id,
+		p.prod_name,
+		p.price,
+		p.IMAGE_FILE,
+		p.prod_no,
+		t.sea,
+		t.cancel_Code,
+		t.TRAN_STATUS_CODE,
+		t.tran_No
+		from 
+		users u,
+		product p,
+		transaction t
+		where t.prod_no=p.prod_No(+) and t.buyer_id = u.user_id(+)
+		order by t.cancel_code
+	
+	</select>
+	
+	
 </mapper>

@@ -15,4 +15,10 @@ public interface PurchaseService {
 	public int updateTranCode(Purchase purchase) throws Exception;
 	
 	public Map<String,Object> getPurchaseList(Search search,String buyerId) throws Exception;
+	
+	public void updateCancelCode(Purchase purchase) throws Exception;
+	
+	public Map<String,Object> cancelList(Search search) throws Exception;
+	
+	public Map<String,Object> saleList(Search search) throws Exception;
 }

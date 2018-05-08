@@ -107,21 +107,22 @@
 			</tr>
 				
 				<c:set var="i" value="${currentPage}"></c:set>
-				<c:set var="j" value="${pageSize}"></c:set>
+				<%-- <c:set var="j" value="${pageSize}"></c:set>
 				<c:set var="k" value="2"></c:set>
-				
+				 --%>
 				
 				<c:forEach var="vo" items="${list}">
-					<c:if test="${vo.purchaseProd.cancelCode == '0'}">					
-						<c:set var="i" value="${i*j-k}"></c:set>
+					<c:if test="${vo.cancelCode == '0'}">					
+						<%-- <c:set var="i" value="${i*j-k}"></c:set> --%>
+						<c:set var="i" value="${i+1}"></c:set>
 					<tr class="ct_list_pop" bgcolor="#ffffff">
 						
 						<td class="ct_list_test1" align="center">
 							<a href="/getPurchase.do?tranNo=${vo.tranNo}">
 								${i}
 							</a>
-							<c:set var="k" value="${k-1}"></c:set>
-							<c:set var="i" value="${currentPage}"></c:set>
+							<%-- <c:set var="k" value="${k-1}"></c:set>
+							<c:set var="i" value="${currentPage}"></c:set> --%>
 						</td>
 						<td></td>
 						
@@ -162,7 +163,7 @@
 						
 						<c:if test="${vo.tranCode=='2'}">
 							<td class="ct_list_test1" align="left">결제완료  
-							<a href="/updateTranCodeByProd.do?prodNo=${vo.purchaseProd.prodNo}&tranCode=${vo.tranCode}">배송하기</a>
+							<a href="/updateTranCodeByProd.do?tranNo=${vo.tranNo}&tranCode=${vo.tranCode}">배송하기</a>
 							</td>
 						</c:if>
 						<c:if test="${vo.tranCode=='3'}">

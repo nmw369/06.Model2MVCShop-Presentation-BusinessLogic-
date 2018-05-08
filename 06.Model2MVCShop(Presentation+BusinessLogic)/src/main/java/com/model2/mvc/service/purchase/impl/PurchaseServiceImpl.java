@@ -49,5 +49,26 @@ public class PurchaseServiceImpl implements PurchaseService {
 		
 		return map;
 	}
-
+	@Override
+	public void updateCancelCode(Purchase purchase) throws Exception {
+		// TODO Auto-generated method stub
+		purchaseDao.updateCancelCode(purchase);
+	}
+	@Override
+	public Map<String, Object> cancelList(Search search) throws Exception {
+		// TODO Auto-generated method stub
+		Map<String, Object> map = new HashMap<String,Object>();
+		map.put("list", purchaseDao.cancelList(search));
+		return map;
+	}
+	@Override
+	public Map<String, Object> saleList(Search search) throws Exception {
+		// TODO Auto-generated method stub
+		Map<String, Object> map = new HashMap<String,Object>();
+		map.put("list", purchaseDao.saleList(search));
+		return map;
+	}
+	
+	
+	
 }

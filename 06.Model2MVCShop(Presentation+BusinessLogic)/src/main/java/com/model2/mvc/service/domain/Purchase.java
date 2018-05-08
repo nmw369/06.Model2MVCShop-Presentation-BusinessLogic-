@@ -109,6 +109,7 @@ public class Purchase {
 		return tranCode;
 	}
 	public void setTranCode(String tranCode) {
+		System.out.println(tranCode+"!!!!!!!!!!!!!!!!");
 		this.tranCode = tranCode.trim();
 	}
 	public int getTranNo() {

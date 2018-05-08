@@ -1,8 +1,10 @@
 package com.model2.mvc.web.user;
 
+
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.model2.mvc.common.Page;
 import com.model2.mvc.common.Search;
 import com.model2.mvc.service.domain.User;
+
 import com.model2.mvc.service.user.UserService;
 
 
@@ -171,4 +174,6 @@ public class UserController {
 		
 		return "forward:/user/listUser.jsp";
 	}
+	
+	
 }
